@@ -6,8 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		74E6A1522FE4AB8500F5A3DC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 74E6A1512FE4AB8500F5A3DC /* README.md */; };
+		74E6A1542FE4ABA800F5A3DC /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 74E6A1532FE4ABA800F5A3DC /* LICENSE */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		74D20A4D2FDB5698000925B7 /* AppealingCompose.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppealingCompose.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		74E6A1512FE4AB8500F5A3DC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		74E6A1532FE4ABA800F5A3DC /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -45,6 +52,8 @@
 		74D20A442FDB5698000925B7 = {
 			isa = PBXGroup;
 			children = (
+				74E6A1532FE4ABA800F5A3DC /* LICENSE */,
+				74E6A1512FE4AB8500F5A3DC /* README.md */,
 				74D20A4F2FDB5698000925B7 /* AppealingCompose */,
 				74D20A4E2FDB5698000925B7 /* Products */,
 			);
@@ -94,6 +103,7 @@
 				TargetAttributes = {
 					74D20A4C2FDB5698000925B7 = {
 						CreatedOnToolsVersion = 26.2;
+						LastSwiftMigration = 2620;
 					};
 				};
 			};
@@ -121,6 +131,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74E6A1542FE4ABA800F5A3DC /* LICENSE in Resources */,
+				74E6A1522FE4AB8500F5A3DC /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +271,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -280,6 +293,9 @@
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "AppealingCompose/AppealingCompose-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
 				SYMROOT = build;
 			};
 			name = Debug;
@@ -289,6 +305,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -309,6 +326,8 @@
 				REGISTER_APP_GROUPS = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "AppealingCompose/AppealingCompose-Bridging-Header.h";
+				SWIFT_VERSION = 6.0;
 				SYMROOT = build;
 			};
 			name = Release;
