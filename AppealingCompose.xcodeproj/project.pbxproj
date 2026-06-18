@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		74E6A1522FE4AB8500F5A3DC /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 74E6A1512FE4AB8500F5A3DC /* README.md */; };
 		74E6A1542FE4ABA800F5A3DC /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 74E6A1532FE4ABA800F5A3DC /* LICENSE */; };
+		74E6A1562FE4AC8700F5A3DC /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = 74E6A1552FE4AC8700F5A3DC /* .gitignore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		74D20A4D2FDB5698000925B7 /* AppealingCompose.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppealingCompose.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		74E6A1512FE4AB8500F5A3DC /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		74E6A1532FE4ABA800F5A3DC /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
+		74E6A1552FE4AC8700F5A3DC /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -52,6 +54,7 @@
 		74D20A442FDB5698000925B7 = {
 			isa = PBXGroup;
 			children = (
+				74E6A1552FE4AC8700F5A3DC /* .gitignore */,
 				74E6A1532FE4ABA800F5A3DC /* LICENSE */,
 				74E6A1512FE4AB8500F5A3DC /* README.md */,
 				74D20A4F2FDB5698000925B7 /* AppealingCompose */,
@@ -131,6 +134,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				74E6A1562FE4AC8700F5A3DC /* .gitignore in Resources */,
 				74E6A1542FE4ABA800F5A3DC /* LICENSE in Resources */,
 				74E6A1522FE4AB8500F5A3DC /* README.md in Resources */,
 			);
