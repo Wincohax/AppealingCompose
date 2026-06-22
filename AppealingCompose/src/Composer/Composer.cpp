@@ -9,6 +9,37 @@
 
 // Rock Bottom implementation, it covers 99% of my use case but will expand later to the Wayland/X11 amount of chars.
 std::string_view Composer::composer(const std::unordered_set<char> &inputs, KeyboardState &state) {
+    
+    if (inputs.contains('A') && inputs.contains(*"'")) {
+        state.registeredInputs.clear();
+        state.tries = 0;
+        return "Á";
+    }
+    if (inputs.contains('E') && inputs.contains(*"'")) {
+        state.registeredInputs.clear();
+        state.tries = 0;
+        return "É";
+    }
+    if (inputs.contains('I') && inputs.contains(*"'")) {
+        state.registeredInputs.clear();
+        state.tries = 0;
+        return "Í";
+    }
+    if (inputs.contains('O') && inputs.contains(*"'")) {
+        state.registeredInputs.clear();
+        state.tries = 0;
+        return "Ó";
+    }
+    if (inputs.contains('U') && inputs.contains(*"'")) {
+        state.registeredInputs.clear();
+        state.tries = 0;
+        return "Ú";
+    }
+    if (inputs.contains('N') && inputs.contains(*"~")) {
+        state.registeredInputs.clear();
+        state.tries = 0;
+        return "Ñ";
+    }
     if (inputs.contains('a') && inputs.contains(*"'")) {
         state.registeredInputs.clear();
         state.tries = 0;
@@ -39,13 +70,12 @@ std::string_view Composer::composer(const std::unordered_set<char> &inputs, Keyb
         state.tries = 0;
         return "ñ";
     }
-    
     state.tries++;
     
     if (state.tries >= 2){
         state.tries = 0;
         state.registeredInputs.clear();
-        return "notfound";
+        return "stop";
     }
     
     return "notfound";

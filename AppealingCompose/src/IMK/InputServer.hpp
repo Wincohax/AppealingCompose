@@ -14,7 +14,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-KeyboardState state {};
+KeyboardState kbState {};
+std::atomic<bool> threadState { false };
 
 @interface InputServer : IMKInputController
 
