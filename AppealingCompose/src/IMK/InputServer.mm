@@ -5,7 +5,7 @@
 //  Created by Wincohax on 11/06/26.
 //
 
-#import "InputServer.h"
+#import "InputServer.hpp"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -25,7 +25,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation InputServer
 
-- (void)commitComposition:(id)sender recieved:(std::string_view)charRecieved
+- (void) commitComposition:(id)sender recieved:(std::string_view)charRecieved
 {
     
     // Takes the string of the composer and makes it an NSString so we can use it.
@@ -34,13 +34,30 @@ NS_ASSUME_NONNULL_BEGIN
     // sends the new char 
     [sender insertText:convertedChar replacementRange:NSMakeRange(NSNotFound, NSNotFound)];
     
+    [self callKeyListener];
+    
+}
+
+// Amazing def innocent race condition but it works like a charm for now.
+
+- (void) callKeyListener {
+    // if (!threadState){
+       // threadState = true;
+        std::thread keyboardThread(&Keyboard::getKeyState, std::ref(kbState));
+        keyboardThread.detach();
+   //     return;
+//    }
+ //   threadState = false;
+   // [self callKeyListener];
 }
 
 
-// both method tells which window is currently on use, I'd rather not use them to do things as it can hang the window based on what u do.
-- (void)activateServer:(id)sender
+// both methods tells which window is currently on use, I'd rather not use them to do things as it can hang the window based on what u do.
+- (void) activateServer:(id)sender
 {
     NSLog(@"Server activated for %@", [sender bundleIdentifier]);
+    [self callKeyListener];
+    
 }
 
 - (void)deactivateServer:(id)sender
@@ -68,15 +85,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL) handleEvent:(NSEvent *) event client:(id) sender{
     
     // First we check if our key is pressed, state is def in the h file.
-    if (!state.wasPressed){
-        state.wasPressed = Keyboard::getKeyState();
+    if (!kbState.wasPressed){
         return NO;
     }
     
     // We get the char from it
     NSString *character = [event characters];
     NSLog(@"Controller got: %@", [event characters]);
-    
     
     //We convert it to a C++ string and get only the char we need.
     std::string converted {[character UTF8String]};
@@ -85,17 +100,26 @@ NS_ASSUME_NONNULL_BEGIN
     std::cout << "THIS IS: " << characterTyped << std::endl;
     
     // we send it to the collector
-    Keyboard::collector(state.wasPressed, characterTyped, state);
+    Keyboard::collector(kbState.wasPressed, characterTyped, kbState);
     
     // we save our result
-    std::string_view result {Composer::composer(state.registeredInputs, state)};
+    std::string_view result {Composer::composer(kbState.registeredInputs, kbState)};
+    
+    // if our composer says that no match was found.
+    if (result == "stop"){
+        kbState.wasPressed = false;
+        [self callKeyListener];
+        return YES;
+    }
     
     // if our result is smth we expect we commit the comp and reset the key state.
     if (result != "notfound"){
         [self commitComposition:sender recieved:result];
-        state.wasPressed = false;
+        kbState.wasPressed = false;
         return YES;
     }
+    
+    
     
     
     // NSString *convertedChar = [NSString stringWithUTF8String:Composer::composer(state.registeredInputs, state).data()];

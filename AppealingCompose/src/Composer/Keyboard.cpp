@@ -7,19 +7,47 @@
 
 #include "Keyboard.hpp"
 
-bool Keyboard::composeKeyEvent() {
-    return CGEventSourceKeyState(kCGEventSourceStateCombinedSessionState, 0x3A); // option key 0x3A
+
+
+
+/*
+ 
+ This was a sad attempt to get it working in singlethread, I'd rather not.
+ 
+CGEventRef Keyboard::nativeKeyListener(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refCon){
+    int64_t keyNumber { CGEventGetIntegerValueField(event, kCGKeyboardEventKeycode) };
+    
+    
+    
+    
+    return <#expression#>;
+}
+CFMachPortRef Keyboard::nativeKeyTapper() {
+    // will branch it later so it depends on the key choosen
+    CGEventMask mask { kCGEventFlagsChanged };
+    
+    return CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionListenOnly, mask, <#CGEventTapCallBack  _Nonnull callback#>, <#void * _Nullable userInfo#>) // option key 0x3A
 }
 
-// Gets the key state, problem is that macOS uses this key and intercepts it first but I'd fix it later.
-bool Keyboard::getKeyState() {
-    bool pressed {false} ;
-    pressed = composeKeyEvent();
-        if (pressed) {
-            std::cout << "Pressed" << std::endl;
-        }
-    return pressed;
+ */
+
+
+
+// Gets the key state
+bool Keyboard::composeKeyEvent() {
+    return CGEventSourceKeyState(kCGEventSourceStateCombinedSessionState, 0x3A);
 }
+
+void Keyboard::getKeyState(KeyboardState &state) {
+        while (!state.wasPressed) {
+            state.wasPressed = composeKeyEvent();
+            if (state.wasPressed) {
+                std::cout << "Pressed" << std::endl;
+                return;
+            }
+        }
+}
+
 
 
 // Dumbest collector ever for now.
