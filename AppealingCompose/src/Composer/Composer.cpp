@@ -149,3 +149,15 @@ std::string Composer::lookUpForChar(const std::vector<std::string> &inputs, Keyb
 void Composer::setSavedSequences(const std::vector<ComposeSequence> &listOfSequences){
     savedSequences = listOfSequences;
 }
+
+void Composer::addSequence(const ComposeSequence &sequence) {
+    savedSequences.push_back(sequence);
+    if (sequence.listOfTokens.size() > maxSizeOfSequence) {
+        maxSizeOfSequence = sequence.listOfTokens.size();
+    }
+}
+
+std::vector<ComposeSequence> Composer::getSavedSequences() {
+    return savedSequences;
+}
+

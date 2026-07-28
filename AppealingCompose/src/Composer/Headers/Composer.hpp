@@ -27,6 +27,8 @@ class Composer {
     static std::vector<::ComposeSequence> getCharSequences(std::string &filePath);
     static std::string lookUpForChar(const std::vector<std::string> &inputs, KeyboardState &state);
     static void setSavedSequences (const std::vector<ComposeSequence> &listOfSequences);
+    static void addSequence(const ComposeSequence &sequence);
+    static std::vector<ComposeSequence> getSavedSequences();
 };
 
 #endif /* Composer_hpp */

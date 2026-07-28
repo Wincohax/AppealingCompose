@@ -7,6 +7,7 @@
 #import <Cocoa/Cocoa.h>
 #import <InputMethodKit/InputMethodKit.h>
 #import "ComposerAdapter.h"
+#import "AppealingCompose-Swift.h"
 
 NSString* connectionName = @"AppealingCompose";
 IMKServer* server;
@@ -17,7 +18,10 @@ int main(int argc, char * argv[]) {
         NSString *ComposeFilePath = [[NSBundle mainBundle] pathForResource:@"Compose" ofType:@"pre"];
         ComposerAdapter *adapter = [[ComposerAdapter alloc] init];
         [adapter loadSequences:ComposeFilePath];
-    [[NSApplication sharedApplication] run];
+        
+        [AppDelegateGUI initializeGUI];
+        
+        [[NSApplication sharedApplication] run];
 
   }
   return 0;
