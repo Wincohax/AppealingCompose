@@ -1,6 +1,6 @@
 <Multi_key> <p> <o> <o>			: "💩"	U1F4A9 # PILE OF POO
 <Multi_key> <F> <U>			: "🖕"	U1F595 # REVERSED HAND WITH MIDDLE FINGER EXTENDED
-<Multi_key> <L> <L> <A> <P>		: "🖖"	U1F596 # RAISED HAND WITH PART BETWEEN MIDDLE AND RING FINGERS
+<Multi_key> <L> <L> <A>		: "🖖"	U1F596 # RAISED HAND WITH PART BETWEEN MIDDLE AND RING FINGERS
 <Multi_key> <apostrophe> <A>		: "🥀"	Aacute # LATIN CAPITAL LETTER A WITH ACUTE
 <dead_circumflex> <Multi_key> <underscore> <o>	: "º"	masculine # MASCULINE ORDINAL INDICATOR
 <Multi_key> <A> <apostrophe>		: "Á"	Aacute # LATIN CAPITAL LETTER A WITH ACUTE

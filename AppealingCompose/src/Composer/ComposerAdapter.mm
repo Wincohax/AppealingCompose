@@ -6,11 +6,19 @@
 //
 
 #import "ComposerAdapter.h"
+#include "Composer.hpp"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation ComposerAdapter
 
+- (void) loadSequences:(NSString *) nativeFilePath{
+    std::string convertedPath { [nativeFilePath UTF8String] };
+    Composer::setSavedSequences(Composer::getCharSequences(convertedPath));
+}
+
 @end
+
+
 
 NS_ASSUME_NONNULL_END

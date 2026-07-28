@@ -11,6 +11,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ComposerAdapter : NSObject
 
+- (void) loadSequences:(NSString *) nativeFilePath;
+
 @end
 
 NS_ASSUME_NONNULL_END
