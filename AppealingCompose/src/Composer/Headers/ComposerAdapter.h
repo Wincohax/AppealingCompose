@@ -12,6 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ComposerAdapter : NSObject
 
 - (void) loadSequences:(NSString *) nativeFilePath;
++ (void) loadSequences:(NSString *) nativeFilePath;
++ (void) setComposeKeyCode:(int) keyCode;
++ (int) getComposeKeyCode;
++ (void) addCustomSequenceTokens:(NSArray<NSString *> *)tokens outputChar:(NSString *)outputChar;
++ (NSArray<NSDictionary *> *) getLoadedSequences;
 
 @end
 

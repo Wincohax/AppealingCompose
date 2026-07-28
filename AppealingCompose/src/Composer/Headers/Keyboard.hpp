@@ -28,6 +28,8 @@ class Keyboard {
     static bool composeKeyEvent();
     static void getKeyState(KeyboardState &state);
     static void collector(const bool& keyRef, std::string &inputCharacter, KeyboardState &state);
+    static void setComposeKeyCode(int keyCode);
+    static int getComposeKeyCode();
 };
 
 

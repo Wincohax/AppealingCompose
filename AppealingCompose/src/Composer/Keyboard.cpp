@@ -28,14 +28,27 @@ CFMachPortRef Keyboard::nativeKeyTapper() {
     
     return CGEventTapCreate(kCGHIDEventTap, kCGHeadInsertEventTap, kCGEventTapOptionListenOnly, mask, <#CGEventTapCallBack  _Nonnull callback#>, <#void * _Nullable userInfo#>) // option key 0x3A
 }
+ 
+ 
+ Gotta check why Nither command key works.
 
  */
 
 
 
+static std::atomic<int> targetKeyCode { 0x3A };
+
+void Keyboard::setComposeKeyCode(int keyCode) {
+    targetKeyCode.store(keyCode);
+}
+
+int Keyboard::getComposeKeyCode() {
+    return targetKeyCode.load();
+}
+
 // Gets the key state
 bool Keyboard::composeKeyEvent() {
-    return CGEventSourceKeyState(kCGEventSourceStateCombinedSessionState, 0x3A);
+    return CGEventSourceKeyState(kCGEventSourceStateCombinedSessionState, (CGKeyCode)targetKeyCode.load());
 }
 
 void Keyboard::getKeyState(KeyboardState &state) {
