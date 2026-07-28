@@ -16,7 +16,7 @@
 #include <ApplicationServices/ApplicationServices.h>
 
 struct KeyboardState {
-    std::unordered_set<char> registeredInputs {};
+    std::vector<std::string> registeredInputs {};
     std::atomic<bool> wasPressed { false };
     int tries { 0 };
 };
@@ -27,7 +27,7 @@ class Keyboard {
    // static CGEventRef nativeKeyListener(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refCon);
     static bool composeKeyEvent();
     static void getKeyState(KeyboardState &state);
-    static void collector(const bool& keyRef, char inputCharacter, KeyboardState &state);
+    static void collector(const bool& keyRef, std::string &inputCharacter, KeyboardState &state);
 };
 
 

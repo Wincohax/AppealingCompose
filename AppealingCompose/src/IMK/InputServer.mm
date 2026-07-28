@@ -34,6 +34,9 @@ NS_ASSUME_NONNULL_BEGIN
     // sends the new char 
     [sender insertText:convertedChar replacementRange:NSMakeRange(NSNotFound, NSNotFound)];
     
+    
+    kbState.registeredInputs.clear();
+    
     [self callKeyListener];
     
 }
@@ -94,8 +97,7 @@ NS_ASSUME_NONNULL_BEGIN
     NSLog(@"Controller got: %@", [event characters]);
     
     //We convert it to a C++ string and get only the char we need.
-    std::string converted {[character UTF8String]};
-    char characterTyped { converted.at(0) };
+    std::string characterTyped {[character UTF8String]};
     
     std::cout << "THIS IS: " << characterTyped << std::endl;
     
@@ -103,17 +105,19 @@ NS_ASSUME_NONNULL_BEGIN
     Keyboard::collector(kbState.wasPressed, characterTyped, kbState);
     
     // we save our result
-    std::string_view result {Composer::composer(kbState.registeredInputs, kbState)};
+    std::string result {Composer::lookUpForChar(kbState.registeredInputs, kbState)};
+    
+    std::cout << result;
     
     // if our composer says that no match was found.
-    if (result == "stop"){
+    if (result == "Stop"){
         kbState.wasPressed = false;
-        [self callKeyListener];
+        [self callKeyListener]; 
         return YES;
     }
     
     // if our result is smth we expect we commit the comp and reset the key state.
-    if (result != "notfound"){
+    if (result != "NotFound"){
         [self commitComposition:sender recieved:result];
         kbState.wasPressed = false;
         return YES;

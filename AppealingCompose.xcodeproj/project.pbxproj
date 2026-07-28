@@ -295,6 +295,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Wincohax.inputmethod.AppealingCompose;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "AppealingCompose/AppealingCompose-Bridging-Header.h";
@@ -328,6 +329,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Wincohax.inputmethod.AppealingCompose;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
+				SDKROOT = macosx;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "AppealingCompose/AppealingCompose-Bridging-Header.h";

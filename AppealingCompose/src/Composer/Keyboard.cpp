@@ -51,12 +51,13 @@ void Keyboard::getKeyState(KeyboardState &state) {
 
 
 // Dumbest collector ever for now.
-void Keyboard::collector(const bool& keyRef, char inputCharacter, KeyboardState &state) {
+void Keyboard::collector(const bool& keyRef, std::string &inputCharacter, KeyboardState &state) {
     if (keyRef) {
-        state.registeredInputs.insert(inputCharacter);
+        state.registeredInputs.push_back(inputCharacter);
     }
-    for (const char x : state.registeredInputs) {
+    for (const std::string &x : state.registeredInputs) {
             std::cout << x << std::endl;
         }
 }
+
 
