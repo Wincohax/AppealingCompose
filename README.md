@@ -18,6 +18,10 @@ The project is functional and can be used, though it remains a work‑in‑progr
 - Simple configuration through the app.
 - Pure C++ Backend to parse and search sequences.
 
+## Demo
+
+<img width="580" height="458" alt="composedemo" src="https://github.com/user-attachments/assets/2f7a02c7-a281-4bf7-9fe1-a7fad815f705" />
+
 ## Build Instructions
 
 1. Open the `AppealingCompose.xcodeproj` in Xcode.
