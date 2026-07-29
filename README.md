@@ -1,4 +1,7 @@
-# AppealingCompose
+<h1 align="center">
+<img width="64" height="64" alt="image" src="https://github.com/user-attachments/assets/56e1ba24-b3f7-4560-8b04-1805e2268f2b" /></img>
+<p style="text-align: center;">AppealingCompose</p>
+</h1>
 
 An implementation of the Compose Key (as seen in Wayland/X11) for macOS, built using the Input Method Kit (IMK).
 
