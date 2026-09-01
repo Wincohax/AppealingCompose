@@ -13,7 +13,6 @@
 #include <iostream>
 #include <unordered_set>
 #include <functional>
-#include <ApplicationServices/ApplicationServices.h>
 
 #include "KeyboardState.h"
 
