@@ -37,7 +37,8 @@ public struct CustomCombination: Identifiable, Codable, Hashable {
     @Published public var customCombinations: [CustomCombination] = []
 
     public let presetKeys: [KeyOption] = [
-        KeyOption(name: "Right Option / Alt", keyCode: 0x3A, detail: "Standard Compose key for macOS (Default)"),
+        KeyOption(name: "Right Option / RAlt", keyCode: 0x3D, detail: "Standard Compose key for macOS (Default)"),
+        KeyOption(name: "Left Option / LAlt", keyCode: 0x3A, detail: "Left Option Key"),
         KeyOption(name: "Right Command ⌘", keyCode: 0x36, detail: "Right Command key"),
         KeyOption(name: "Left Command ⌘", keyCode: 0x37, detail: "Left Command key"),
         KeyOption(name: "Right Control ⌃", keyCode: 0x3E, detail: "Right Control key"),

@@ -29,11 +29,7 @@
 std::vector<ComposeSequence> savedSequences {};
 unsigned long maxSizeOfSequence {};
 
-std::vector<ComposeSequence> Composer::getCharSequences(std::string &filePath) {
-    const std::unordered_map<std::string, std::string> charactersMap {
-        {"<apostrophe>", "'"},
-        {"<asciitilde>", "~"},
-    };
+std::vector<ComposeSequence> Composer::getCharSequences(const std::string &filePath) {
 
     std::vector<ComposeSequence> listOfSequences {};
     ComposeSequence charSequence {};
@@ -120,7 +116,10 @@ std::vector<ComposeSequence> Composer::getCharSequences(std::string &filePath) {
     return listOfSequences;
 }
 
-std::string Composer::lookUpForChar(const std::vector<std::string> &inputs, KeyboardState &state) {
+std::string Composer::lookUpForChar(const std::vector<std::string> &inputs) {
+    KeyboardState *kbpointer { KeyboardState::GetInstance() };
+    
+    
     bool hotCheck { false };
     
     for (const ComposeSequence &sequence : savedSequences) {
@@ -139,7 +138,7 @@ std::string Composer::lookUpForChar(const std::vector<std::string> &inputs, Keyb
     }
     // fix bug with max limit of possible tokens
     if (!hotCheck && (inputs.size() <= 1 || inputs.size() >= maxSizeOfSequence)) {
-        state.registeredInputs.clear();
+        kbpointer->clearInputs();
         return "Stop";
     }
 

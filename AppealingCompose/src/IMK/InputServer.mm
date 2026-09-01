@@ -35,39 +35,50 @@ NS_ASSUME_NONNULL_BEGIN
     [sender insertText:convertedChar replacementRange:NSMakeRange(NSNotFound, NSNotFound)];
     
     
-    kbState.registeredInputs.clear();
+    KeyboardState::clearInputs();
     
-    [self callKeyListener];
+   // threadState.store(false);
+    
+  //  [self callKeyListener];
     
 }
 
-// Amazing def innocent race condition but it works like a charm for now.
+// Everything good now.
 
+/*
 - (void) callKeyListener {
-    // if (!threadState){
-       // threadState = true;
-        std::thread keyboardThread(&Keyboard::getKeyState, std::ref(kbState));
+     if (!threadState){
+        threadState.store(true);
+        std::thread keyboardThread(&Keyboard::startKeyWatch, std::ref(kbState));
         keyboardThread.detach();
-   //     return;
-//    }
- //   threadState = false;
-   // [self callKeyListener];
+        return;
+    }
 }
+ */
 
 
 // both methods tells which window is currently on use, I'd rather not use them to do things as it can hang the window based on what u do.
 - (void) activateServer:(id)sender
 {
-    NSLog(@"Server activated for %@", [sender bundleIdentifier]);
-    [self callKeyListener];
     
+    NSLog(@"Server activated for %@", [sender bundleIdentifier]);
+  
 }
 
-- (void)deactivateServer:(id)sender
+- (void) deactivateServer:(id)sender
 {
     NSLog(@"Server deactivated for %@", [sender bundleIdentifier]);
 }
 
+
+- (void) checkComposeKeyPress: (nonnull NSEvent*) keyEvent {
+    NSLog(@"code pressed: %hu", keyEvent.keyCode);
+    
+    if (keyEvent.keyCode == KeyboardState::GetInstance()->targetKeyCode.load()){
+            KeyboardState::GetInstance()->turnOnKey();
+            return;
+    }
+}
 
 
 /*
@@ -87,8 +98,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL) handleEvent:(NSEvent *) event client:(id) sender{
     
+    KeyboardState *kbpointer { KeyboardState::GetInstance() };
+    
+    [self checkComposeKeyPress:event];
+    
+    if (event.type == NSEventTypeFlagsChanged){
+        return NO;
+    }
+    
     // First we check if our key is pressed, state is def in the h file.
-    if (!kbState.wasPressed){
+    if (!KeyboardState::getKeyStatus()){
         return NO;
     }
     
@@ -102,24 +121,25 @@ NS_ASSUME_NONNULL_BEGIN
     std::cout << "THIS IS: " << characterTyped << std::endl;
     
     // we send it to the collector
-    Keyboard::collector(kbState.wasPressed, characterTyped, kbState);
+    Keyboard::collector(KeyboardState::getKeyStatus(), characterTyped);
     
     // we save our result
-    std::string result {Composer::lookUpForChar(kbState.registeredInputs, kbState)};
+    std::string result {Composer::lookUpForChar(kbpointer->registeredInputs)};
     
     std::cout << result;
     
     // if our composer says that no match was found.
     if (result == "Stop"){
-        kbState.wasPressed = false;
-        [self callKeyListener]; 
+        KeyboardState::turnOffKey();
+      //  threadState.store(false);
+       // [self callKeyListener];
         return YES;
     }
     
     // if our result is smth we expect we commit the comp and reset the key state.
     if (result != "NotFound"){
+        KeyboardState::turnOffKey();
         [self commitComposition:sender recieved:result];
-        kbState.wasPressed = false;
         return YES;
     }
     
@@ -131,6 +151,12 @@ NS_ASSUME_NONNULL_BEGIN
     // std::cout << Composer::composer(state.registeredInputs, state);
     
     return YES;
+}
+
+
+// Recognizes each keypress and (MOST) Modifier Keys
+- (NSUInteger) recognizedEvents:(nonnull id)sender {
+    return NSEventMaskKeyDown | NSEventMaskFlagsChanged;
 }
 
 @end

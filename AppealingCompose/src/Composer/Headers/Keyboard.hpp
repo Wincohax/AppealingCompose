@@ -15,20 +15,16 @@
 #include <functional>
 #include <ApplicationServices/ApplicationServices.h>
 
-struct KeyboardState {
-    std::vector<std::string> registeredInputs {};
-    std::atomic<bool> wasPressed { false };
-    int tries { 0 };
-};
+#include "KeyboardState.h"
 
 class Keyboard {
     public:
-    //static CFMachPortRef nativeKeyTapper();
-   // static CGEventRef nativeKeyListener(CGEventTapProxy proxy, CGEventType type, CGEventRef event, void *refCon);
-    static bool composeKeyEvent();
-    static void getKeyState(KeyboardState &state);
-    static void collector(const bool& keyRef, std::string &inputCharacter, KeyboardState &state);
-    static void setComposeKeyCode(int keyCode);
+    // legacy behavior
+  //  static bool composeKeyEvent();
+    
+  //  static void getKeyState();
+    static void collector(const bool &keyRef, const std::string &inputCharacter);
+    static void setComposeKeyCode(const int &keyCode);
     static int getComposeKeyCode();
 };
 
