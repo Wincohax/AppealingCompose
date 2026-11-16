@@ -36,8 +36,13 @@ public struct CustomCombination: Identifiable, Codable, Hashable {
 
     @Published public var customCombinations: [CustomCombination] = []
 
+    // Imported XCompose file, nil when none is loaded
+    @Published public var userComposeFileName: String? = nil
+    @Published public var userComposeSequenceCount: Int = 0
+
     public let presetKeys: [KeyOption] = [
-        KeyOption(name: "Right Option / Alt", keyCode: 0x3A, detail: "Standard Compose key for macOS (Default)"),
+        KeyOption(name: "Right Option / RAlt", keyCode: 0x3D, detail: "Standard Compose key for macOS (Default)"),
+        KeyOption(name: "Left Option / LAlt", keyCode: 0x3A, detail: "Left Option Key"),
         KeyOption(name: "Right Command ⌘", keyCode: 0x36, detail: "Right Command key"),
         KeyOption(name: "Left Command ⌘", keyCode: 0x37, detail: "Left Command key"),
         KeyOption(name: "Right Control ⌃", keyCode: 0x3E, detail: "Right Control key"),
@@ -55,6 +60,7 @@ public struct CustomCombination: Identifiable, Codable, Hashable {
         // Sync initial key code to C++ layer
         ComposerAdapter.setComposeKeyCode(Int32(initialKey))
         loadCustomCombinations()
+        loadUserComposeFile()
     }
 
     public func setKey(_ keyCode: Int) {
@@ -63,12 +69,53 @@ public struct CustomCombination: Identifiable, Codable, Hashable {
 
     // MARK: - Custom Combinations Persistence
 
-    private var customFilePath: URL {
+    private var supportFolder: URL {
         let fileManager = FileManager.default
         let appSupport = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask).first!
         let folder = appSupport.appendingPathComponent("AppealingCompose", isDirectory: true)
         try? fileManager.createDirectory(at: folder, withIntermediateDirectories: true)
-        return folder.appendingPathComponent("CustomCompose.json")
+        return folder
+    }
+
+    private var customFilePath: URL {
+        supportFolder.appendingPathComponent("CustomCompose.json")
+    }
+
+    // MARK: - User XCompose File
+
+    // The sandbox only lets us read the picked file during the import, so we keep our own copy of it
+    private var userComposeFilePath: URL {
+        supportFolder.appendingPathComponent("UserXCompose")
+    }
+
+    private let userComposeNameKey = "AppealingCompose_UserComposeFileName"
+
+    private func loadUserComposeFile() {
+        let url = userComposeFilePath
+        guard FileManager.default.fileExists(atPath: url.path) else { return }
+
+        userComposeSequenceCount = ComposerAdapter.loadUserComposeFile(url.path)
+        userComposeFileName = UserDefaults.standard.string(forKey: userComposeNameKey) ?? url.lastPathComponent
+    }
+
+    public func importComposeFile(from source: URL) throws {
+        let isScoped = source.startAccessingSecurityScopedResource()
+        defer {
+            if isScoped { source.stopAccessingSecurityScopedResource() }
+        }
+
+        let data = try Data(contentsOf: source)
+        try data.write(to: userComposeFilePath, options: .atomic)
+        UserDefaults.standard.set(source.lastPathComponent, forKey: userComposeNameKey)
+        loadUserComposeFile()
+    }
+
+    public func removeComposeFile() {
+        try? FileManager.default.removeItem(at: userComposeFilePath)
+        UserDefaults.standard.removeObject(forKey: userComposeNameKey)
+        ComposerAdapter.clearUserComposeFile()
+        userComposeFileName = nil
+        userComposeSequenceCount = 0
     }
 
     public func loadCustomCombinations() {
@@ -109,6 +156,8 @@ public struct CustomCombination: Identifiable, Codable, Hashable {
     }
 
     private func applyCustomCombinationsToEngine() {
+        // start from scratch so saved or deleted combinations don't pile up in the engine
+        ComposerAdapter.clearCustomSequences()
         for combo in customCombinations {
             ComposerAdapter.addCustomSequenceTokens(combo.sequenceTokens, outputChar: combo.outputChar)
         }

@@ -16,7 +16,10 @@ int main(int argc, char * argv[]) {
     @autoreleasepool{
         server = [[IMKServer alloc] initWithName:(NSString*)connectionName bundleIdentifier:[[NSBundle mainBundle] bundleIdentifier]];
         NSString *ComposeFilePath = [[NSBundle mainBundle] pathForResource:@"Compose" ofType:@"pre"];
+        
         ComposerAdapter *adapter = [[ComposerAdapter alloc] init];
+        
+        
         [adapter loadSequences:ComposeFilePath];
         
         [AppDelegateGUI initializeGUI];

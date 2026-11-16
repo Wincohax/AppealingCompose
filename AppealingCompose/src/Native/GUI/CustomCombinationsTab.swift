@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UniformTypeIdentifiers
 
 struct CustomCombinationsTab: View {
     @EnvironmentObject var manager: ComposeKeyManager
@@ -15,6 +16,10 @@ struct CustomCombinationsTab: View {
     @State private var newTokensInput: String = ""
     @State private var newResultInput: String = ""
     @State private var errorMessage: String? = nil
+
+    // XCompose file import state
+    @State private var isImportingFile: Bool = false
+    @State private var importError: String? = nil
 
     var filteredCustoms: [CustomCombination] {
         if searchText.isEmpty {
@@ -57,6 +62,57 @@ struct CustomCombinationsTab: View {
             }
             .padding(16)
             .background(Color(NSColor.windowBackgroundColor))
+
+            Divider()
+
+            // XCompose File Import
+            HStack(spacing: 12) {
+                Image(systemName: "doc.text")
+                    .foregroundColor(.secondary)
+
+                VStack(alignment: .leading, spacing: 2) {
+                    if let fileName = manager.userComposeFileName {
+                        Text("XCompose File: \(fileName)")
+                            .font(.system(size: 13, weight: .semibold))
+                        Text("\(manager.userComposeSequenceCount) sequences loaded")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("No XCompose File")
+                            .font(.system(size: 13, weight: .semibold))
+                        Text("Import an XCompose file to add its sequences.")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    if let err = importError {
+                        Text(err)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
+                }
+
+                Spacer()
+
+                if manager.userComposeFileName != nil {
+                    Button("Remove") {
+                        manager.removeComposeFile()
+                    }
+                }
+
+                Button(manager.userComposeFileName == nil ? "Import XCompose File…" : "Replace…") {
+                    importError = nil
+                    isImportingFile = true
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 10)
+            .fileImporter(isPresented: $isImportingFile, allowedContentTypes: [.item]) { result in
+                do {
+                    try manager.importComposeFile(from: result.get())
+                } catch {
+                    importError = "Couldn't import file: \(error.localizedDescription)"
+                }
+            }
 
             Divider()
 
@@ -159,7 +215,7 @@ struct CustomCombinationsTab: View {
                     Text("Key Sequence Tokens")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                    Text("Enter space-separated characters or tokens (e.g., 'a b' or '=' '=')")
+                    Text("Enter space-separated characters or keysym names (e.g., '= =' or 'minus greater')")
                         .font(.caption)
                         .foregroundColor(.secondary)
 
