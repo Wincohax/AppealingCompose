@@ -40,6 +40,22 @@ NS_ASSUME_NONNULL_BEGIN
     Composer::addSequence(seq);
 }
 
++ (void) clearCustomSequences {
+    Composer::clearSequences(SequenceLayer::Custom);
+}
+
+// Loads an XCompose file on top of the default sequences, returns how many sequences it had
++ (NSInteger) loadUserComposeFile:(NSString *) nativeFilePath {
+    std::string convertedPath { [nativeFilePath UTF8String] };
+    std::vector<ComposeSequence> sequences { Composer::getCharSequences(convertedPath) };
+    Composer::setSequences(SequenceLayer::UserFile, sequences);
+    return static_cast<NSInteger>(sequences.size());
+}
+
++ (void) clearUserComposeFile {
+    Composer::clearSequences(SequenceLayer::UserFile);
+}
+
 + (NSArray<NSDictionary *> *) getLoadedSequences {
     NSMutableArray *result = [NSMutableArray array];
     auto seqs = Composer::getSavedSequences();

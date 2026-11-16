@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void) setComposeKeyCode:(int) keyCode;
 + (int) getComposeKeyCode;
 + (void) addCustomSequenceTokens:(NSArray<NSString *> *)tokens outputChar:(NSString *)outputChar;
++ (void) clearCustomSequences;
++ (NSInteger) loadUserComposeFile:(NSString *) nativeFilePath;
++ (void) clearUserComposeFile;
 + (NSArray<NSDictionary *> *) getLoadedSequences;
 
 @end

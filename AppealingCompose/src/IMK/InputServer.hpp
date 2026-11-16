@@ -8,6 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import <Foundation/Foundation.h>
 #import <InputMethodKit/InputMethodKit.h>
+#import <Carbon/Carbon.h>
 
 #import "Keyboard.hpp"
 #include "Composer.hpp"
@@ -19,7 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)commitComposition:(id)sender recieved:(std::string_view)charRecieved;
 - (void)activateServer:(id)sender;
-- (void) checkComposeKeyPress: (nonnull NSEvent*) keyEvent;
+- (BOOL) checkComposeKeyPress: (nonnull NSEvent*) keyEvent;
+- (void) stopComposing;
 - (NSUInteger) recognizedEvents:(id) sender;
 - (BOOL) handleEvent:(NSEvent *) event client:(id) sender;
 

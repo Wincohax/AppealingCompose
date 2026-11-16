@@ -10,10 +10,11 @@
 
 #include <iostream>
 #include <fstream>
-#include <regex>
 #include <vector>
 #include <unordered_map>
 #include <algorithm>
+#include <memory>
+#include <optional>
 
 #include "Keyboard.hpp"
 
@@ -22,83 +23,40 @@ struct ComposeSequence {
     std::string composedChar {};
 };
 
-
-const std::unordered_map<std::string, std::string> charactersMap {
-    // Basic ASCII punctuation and symbols
-    
-    {"<space>", " "},
-    {"<Tab>", "\t"},
-    {"<BackSpace>", "\b"},
-    {"<Return>", "\n"},
-    {"<Escape>", "\u001B"},
-
-    {"<exclam>", "!"},
-    {"<quotedbl>", "\""},
-    {"<numbersign>", "#"},
-    {"<dollar>", "$"},
-    {"<percent>", "%"},
-    {"<ampersand>", "&"},
-    {"<apostrophe>", "'"},
-    {"<parenleft>", "("},
-    {"<parenright>", ")"},
-    {"<asterisk>", "*"},
-    {"<plus>", "+"},
-    {"<comma>", ","},
-    {"<minus>", "-"},
-    {"<period>", "."},
-    {"<slash>", "/"},
-
-    // More punctuation
-    {"<colon>", ":"},
-    {"<semicolon>", ";"},
-    {"<less>", "<"},
-    {"<equal>", "="},
-    {"<greater>", ">"},
-    {"<question>", "?"},
-    {"<at>", "@"},
-
-    // More ASCII symbols
-    {"<bracketleft>", "["},
-    {"<backslash>", "\\"},
-    {"<bracketright>", "]"},
-    {"<asciicircum>", "^"},
-    {"<underscore>", "_"},
-    {"<grave>", "`"},
-    {"<braceleft>", "{"},
-    {"<bar>", "|"},
-    {"<braceright>", "}"},
-    {"<asciitilde>", "~"},
-
-    // Common named tokens
-    {"<dead_acute>", "'"},
-    {"<dead_grave>", "`"},
-    {"<dead_circumflex>", "^"},
-    {"<dead_tilde>", "~"},
-    {"<dead_diaeresis>", "\u00A8"},
-    {"<dead_cedilla>", "\u00B8"},
-
-    // Currency and misc
-    {"<EuroSign>", "\u20AC"},
-    {"<cent>", "\u00A2"},
-    {"<sterling>", "\u00A3"},
-    {"<yen>", "\u00A5"},
-
-    // Arrows
-    {"<Left>", "\u2190"},
-    {"<Up>", "\u2191"},
-    {"<Right>", "\u2192"},
-    {"<Down>", "\u2193"}
+// What the composer thinks about the keys typed so far
+enum class ComposeStatus {
+    Composed,   // the inputs are a full sequence, composedChar holds the result
+    Pending,    // the inputs are the start of at least one sequence, keep listening
+    NoMatch     // no sequence starts with these inputs, stop composing
 };
 
+struct ComposeResult {
+    ComposeStatus status { ComposeStatus::NoMatch };
+    std::string composedChar {};
+};
+
+// Where a group of sequences came from. Later layers override earlier ones.
+enum class SequenceLayer {
+    Default,    // bundled Compose.pre
+    UserFile,   // XCompose file imported by the user
+    Custom      // combinations made in the GUI
+};
 
 class Composer {
     public:
+    // Parses a Compose/XCompose file (following its include lines) into sequences
     static std::vector<::ComposeSequence> getCharSequences(const std::string &filePath);
-    static std::string lookUpForChar(const std::vector<std::string> &inputs);
-    static void setSavedSequences (const std::vector<ComposeSequence> &listOfSequences);
+    static ComposeResult lookUpForChar(const std::vector<std::string> &inputs);
+
+    static void setSequences(SequenceLayer layer, const std::vector<ComposeSequence> &listOfSequences);
+    static void clearSequences(SequenceLayer layer);
+    static void setSavedSequences(const std::vector<ComposeSequence> &listOfSequences);
     static void addSequence(const ComposeSequence &sequence);
     static std::vector<ComposeSequence> getSavedSequences();
+
+    // Turns a token like "<Cyrillic_a>", "minus", "U2192" or "é" into the text macOS sends for that key.
+    // Returns nullopt when the token can't be typed.
+    static std::optional<std::string> resolveToken(const std::string &token);
 };
 
 #endif /* Composer_hpp */
-
